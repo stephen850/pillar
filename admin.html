@@ -1,1 +1,1653 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PILLAR OPS — Touring Infrastructure</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<style>
+/* ═══════════════════════════════════════
+   TOKENS
+═══════════════════════════════════════ */
+:root {
+  --black:      #0A0A08;
+  --off-white:  #F2F0EC;
+  --warm-grey:  #C8C4BC;
+  --gold:       #8B7D55;
+  --gold-light: #B8A880;
+  --deep-grey:  #2A2926;
+  --mid-grey:   #6B6860;
+  --mono: 'Space Mono', monospace;
+  --serif: 'Instrument Serif', serif;
+  --nav-h: 64px;
+}
 
+/* ═══════════════════════════════════════
+   RESET & BASE
+═══════════════════════════════════════ */
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior: smooth; }
+body {
+  background: var(--off-white);
+  color: var(--black);
+  font-family: var(--mono);
+  overflow-x: hidden;
+  cursor: none;
+}
+a { text-decoration: none; color: inherit; }
+
+/* ═══════════════════════════════════════
+   CUSTOM CURSOR
+═══════════════════════════════════════ */
+.cursor {
+  position: fixed;
+  pointer-events: none;
+  z-index: 9999;
+  mix-blend-mode: difference;
+}
+.cursor-dot {
+  width: 6px; height: 6px;
+  background: var(--off-white);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  transition: transform 0.1s ease;
+}
+.cursor-ring {
+  width: 32px; height: 32px;
+  border: 1px solid var(--off-white);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  transition: transform 0.18s ease, width 0.2s ease, height 0.2s ease;
+}
+.cursor-ring.hovered { width: 48px; height: 48px; }
+
+/* ═══════════════════════════════════════
+   LOGO COMPONENT
+═══════════════════════════════════════ */
+.logo {
+  display: inline-flex;
+  flex-direction: column;
+  line-height: 1;
+  font-family: var(--mono);
+  font-weight: 700;
+  text-transform: uppercase;
+}
+.logo .lw { display: flex; align-items: center; }
+.logo .lp { color: var(--black); letter-spacing: 0.12em; }
+.logo .lb { display: inline-block; background: var(--gold); flex-shrink: 0; }
+.logo .ll { color: var(--black); letter-spacing: 0.12em; }
+.logo .lr { width: 100%; height: 1px; background: var(--warm-grey); }
+.logo .lo { font-weight: 400; color: var(--mid-grey); letter-spacing: 0.38em; }
+
+.logo.xs { font-size: 11px; }
+.logo.xs .lb { width:2px; height:10px; margin:0 2px; }
+.logo.xs .lr { margin:2px 0; }
+.logo.xs .lo { font-size:6px; margin-top:1px; }
+
+.logo.sm { font-size: 15px; }
+.logo.sm .lb { width:2px; height:14px; margin:0 3px; }
+.logo.sm .lr { margin:3px 0; }
+.logo.sm .lo { font-size:7px; margin-top:1px; }
+
+.logo.md { font-size: 24px; }
+.logo.md .lb { width:3px; height:22px; margin:0 4px; }
+.logo.md .lr { margin:4px 0; }
+.logo.md .lo { font-size:9px; margin-top:2px; }
+
+.logo.lg { font-size: 38px; }
+.logo.lg .lb { width:4px; height:36px; margin:0 5px; }
+.logo.lg .lr { margin:5px 0; }
+.logo.lg .lo { font-size:13px; margin-top:2px; }
+
+.logo.dark .lp, .logo.dark .ll { color: var(--off-white); }
+.logo.dark .lb { background: var(--gold); }
+.logo.dark .lr { background: var(--deep-grey); }
+.logo.dark .lo { color: var(--gold-light); }
+
+.logo.gold .lp, .logo.gold .ll { color: var(--black); }
+.logo.gold .lb { background: var(--black); }
+.logo.gold .lr { background: var(--deep-grey); opacity:.25; }
+.logo.gold .lo { color: var(--deep-grey); }
+
+/* ═══════════════════════════════════════
+   NAVIGATION
+═══════════════════════════════════════ */
+nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  height: var(--nav-h);
+  background: var(--black);
+  border-bottom: 1px solid var(--deep-grey);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 48px;
+  z-index: 1000;
+  transition: border-color 0.3s;
+}
+nav.scrolled { border-bottom-color: var(--gold); }
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 40px;
+  list-style: none;
+}
+.nav-links a {
+  font-size: 9px;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--mid-grey);
+  transition: color 0.2s;
+  position: relative;
+  padding-bottom: 2px;
+}
+.nav-links a::after {
+  content: '';
+  position: absolute;
+  bottom: -2px; left: 0;
+  width: 0; height: 1px;
+  background: var(--gold);
+  transition: width 0.3s ease;
+}
+.nav-links a:hover { color: var(--off-white); }
+.nav-links a:hover::after { width: 100%; }
+.nav-links a.active { color: var(--off-white); }
+.nav-links a.active::after { width: 100%; }
+
+.nav-cta {
+  font-size: 9px;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--black);
+  background: var(--gold);
+  padding: 10px 20px;
+  transition: background 0.2s, color 0.2s;
+}
+.nav-cta:hover { background: var(--gold-light); }
+
+.nav-mobile-btn {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  cursor: none;
+  background: none;
+  border: none;
+  padding: 4px;
+}
+.nav-mobile-btn span {
+  width: 24px; height: 1px;
+  background: var(--off-white);
+  transition: transform 0.3s, opacity 0.3s;
+}
+
+/* ═══════════════════════════════════════
+   SCROLL REVEAL
+═══════════════════════════════════════ */
+.reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+.reveal-delay-1 { transition-delay: 0.1s; }
+.reveal-delay-2 { transition-delay: 0.2s; }
+.reveal-delay-3 { transition-delay: 0.3s; }
+.reveal-delay-4 { transition-delay: 0.4s; }
+
+/* ═══════════════════════════════════════
+   SECTION BASE
+═══════════════════════════════════════ */
+section {
+  padding: 100px 80px;
+  border-bottom: 1px solid var(--warm-grey);
+  position: relative;
+}
+.section-eyebrow {
+  font-size: 9px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.section-eyebrow::before {
+  content: '';
+  width: 3px; height: 16px;
+  background: var(--gold);
+  flex-shrink: 0;
+}
+.section-title {
+  font-family: var(--mono);
+  font-weight: 700;
+  font-size: clamp(32px, 4vw, 56px);
+  letter-spacing: -0.03em;
+  line-height: 0.95;
+  color: var(--black);
+  margin-bottom: 32px;
+}
+
+/* ═══════════════════════════════════════
+   HERO
+═══════════════════════════════════════ */
+#hero {
+  min-height: 100vh;
+  background: var(--black);
+  padding: 0;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  border-bottom: none;
+  overflow: hidden;
+}
+
+.hero-left {
+  padding: calc(var(--nav-h) + 80px) 80px 80px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  border-right: 1px solid var(--deep-grey);
+  position: relative;
+}
+.hero-left::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 0;
+  width: 4px; height: 100%;
+  background: var(--gold);
+}
+
+.hero-tagline {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 13px;
+  color: var(--mid-grey);
+  letter-spacing: 0.05em;
+  margin-bottom: 36px;
+  padding-left: 4px;
+}
+
+.hero-headline {
+  font-family: var(--mono);
+  font-weight: 700;
+  font-size: clamp(52px, 6.5vw, 96px);
+  letter-spacing: -0.04em;
+  line-height: 0.88;
+  color: var(--off-white);
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.hero-headline .gold { color: var(--gold); }
+
+.hero-sub {
+  margin-top: 48px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+.hero-desc {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 16px;
+  color: var(--warm-grey);
+  line-height: 1.6;
+  max-width: 420px;
+}
+.hero-ctas {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.btn-primary {
+  font-size: 9px;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--black);
+  background: var(--gold);
+  padding: 14px 28px;
+  transition: background 0.2s;
+  cursor: none;
+}
+.btn-primary:hover { background: var(--gold-light); }
+.btn-ghost {
+  font-size: 9px;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--off-white);
+  background: transparent;
+  padding: 13px 28px;
+  border: 1px solid var(--deep-grey);
+  transition: border-color 0.2s;
+  cursor: none;
+}
+.btn-ghost:hover { border-color: var(--gold); }
+
+.hero-right {
+  padding: calc(var(--nav-h) + 80px) 80px 80px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Large background text */
+.hero-bg-text {
+  position: absolute;
+  right: -10px; bottom: 40px;
+  font-family: var(--mono);
+  font-weight: 700;
+  font-size: clamp(80px, 12vw, 160px);
+  color: var(--deep-grey);
+  letter-spacing: -0.05em;
+  line-height: 0.85;
+  text-align: right;
+  pointer-events: none;
+  user-select: none;
+}
+
+.hero-logo-wrap {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.hero-stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1px;
+  background: var(--deep-grey);
+  margin-top: auto;
+  position: relative;
+  z-index: 1;
+}
+.hero-stat {
+  background: var(--black);
+  padding: 28px 24px;
+}
+.hero-stat-num {
+  font-family: var(--mono);
+  font-weight: 700;
+  font-size: 28px;
+  letter-spacing: -0.02em;
+  color: var(--off-white);
+  margin-bottom: 4px;
+}
+.hero-stat-num span { color: var(--gold); }
+.hero-stat-label {
+  font-size: 9px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--mid-grey);
+}
+
+/* Scroll indicator */
+.scroll-hint {
+  position: absolute;
+  bottom: 32px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  z-index: 10;
+}
+.scroll-hint span {
+  font-size: 8px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--mid-grey);
+}
+.scroll-hint .arrow {
+  width: 1px; height: 40px;
+  background: linear-gradient(to bottom, var(--gold), transparent);
+  animation: scrollArrow 1.6s ease-in-out infinite;
+}
+@keyframes scrollArrow {
+  0%, 100% { opacity: 1; transform: scaleY(1); }
+  50% { opacity: 0.4; transform: scaleY(0.6); }
+}
+
+/* ═══════════════════════════════════════
+   TICKER
+═══════════════════════════════════════ */
+.ticker {
+  background: var(--gold);
+  overflow: hidden;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--warm-grey);
+}
+.ticker-track {
+  display: flex;
+  white-space: nowrap;
+  animation: ticker 22s linear infinite;
+}
+.ticker-track span {
+  font-size: 10px;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--black);
+  padding: 0 32px;
+}
+.ticker-track span.sep {
+  color: var(--deep-grey);
+  padding: 0 4px;
+  opacity: 0.4;
+}
+@keyframes ticker {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+/* ═══════════════════════════════════════
+   ABOUT
+═══════════════════════════════════════ */
+#about {
+  background: var(--off-white);
+}
+.about-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 80px;
+  align-items: start;
+}
+.about-body {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 20px;
+  line-height: 1.55;
+  color: var(--deep-grey);
+  margin-bottom: 32px;
+}
+.about-detail {
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  color: var(--mid-grey);
+  line-height: 1.9;
+  margin-bottom: 40px;
+}
+.about-right { padding-top: 8px; }
+
+.pillars-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  background: var(--warm-grey);
+  margin-bottom: 40px;
+}
+.pillar-item {
+  background: var(--off-white);
+  padding: 20px 24px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  transition: background 0.2s;
+}
+.pillar-item:hover { background: #EDEAE4; }
+.pi-num {
+  font-size: 9px;
+  letter-spacing: 0.2em;
+  color: var(--gold);
+  flex-shrink: 0;
+  width: 28px;
+}
+.pi-text {
+  font-size: 11px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--black);
+}
+.pi-arrow {
+  margin-left: auto;
+  font-size: 11px;
+  color: var(--warm-grey);
+  transition: color 0.2s, transform 0.2s;
+}
+.pillar-item:hover .pi-arrow { color: var(--gold); transform: translateX(4px); }
+
+.manifesto-block {
+  background: var(--black);
+  padding: 36px 32px;
+  position: relative;
+}
+.manifesto-block::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 0;
+  width: 3px; height: 100%;
+  background: var(--gold);
+}
+.manifesto-block p {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 17px;
+  color: var(--off-white);
+  line-height: 1.5;
+  padding-left: 12px;
+}
+.manifesto-block cite {
+  display: block;
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-top: 16px;
+  padding-left: 12px;
+  font-style: normal;
+}
+
+/* ═══════════════════════════════════════
+   SERVICES
+═══════════════════════════════════════ */
+#services {
+  background: var(--black);
+  color: var(--off-white);
+  border-bottom: none;
+}
+#services .section-title { color: var(--off-white); }
+#services .section-eyebrow { color: var(--gold); }
+
+.services-intro {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 80px;
+  margin-bottom: 72px;
+  align-items: end;
+}
+.services-intro-text {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 19px;
+  color: var(--warm-grey);
+  line-height: 1.55;
+}
+.services-intro-note {
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  color: var(--mid-grey);
+  line-height: 1.9;
+  padding-left: 20px;
+  border-left: 1px solid var(--deep-grey);
+}
+
+.desks-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1px;
+  background: var(--deep-grey);
+}
+.desk {
+  background: var(--black);
+  padding: 44px 36px;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow: hidden;
+  transition: background 0.25s;
+  min-height: 420px;
+}
+.desk::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0;
+  width: 100%; height: 3px;
+  background: var(--gold);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.4s ease;
+}
+.desk:hover { background: #121210; }
+.desk:hover::after { transform: scaleX(1); }
+
+.desk-logo { margin-bottom: 32px; }
+.desk-n {
+  font-size: 9px;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 12px;
+}
+.desk-t {
+  font-weight: 700;
+  font-size: 18px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  line-height: 1.15;
+  margin-bottom: 20px;
+  color: var(--off-white);
+}
+.desk-d {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 13px;
+  color: var(--mid-grey);
+  line-height: 1.7;
+  flex: 1;
+}
+.desk-scope {
+  margin-top: 28px;
+  padding-top: 24px;
+  border-top: 1px solid var(--deep-grey);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.desk-scope-item {
+  font-size: 9px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--mid-grey);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.desk-scope-item::before {
+  content: '';
+  width: 3px; height: 3px;
+  background: var(--gold);
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+/* ═══════════════════════════════════════
+   PRICING
+═══════════════════════════════════════ */
+#pricing {
+  background: var(--off-white);
+}
+.pricing-header {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 80px;
+  margin-bottom: 64px;
+  align-items: end;
+}
+.pricing-note {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 18px;
+  color: var(--deep-grey);
+  line-height: 1.55;
+}
+.pricing-rule {
+  font-size: 10px;
+  letter-spacing: 0.15em;
+  color: var(--mid-grey);
+  line-height: 2;
+  padding-left: 20px;
+  border-left: 1px solid var(--warm-grey);
+}
+
+.pricing-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--off-white);
+}
+.pricing-table th {
+  font-size: 9px;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--mid-grey);
+  text-align: left;
+  padding: 14px 24px;
+  border-bottom: 1px solid var(--warm-grey);
+  background: var(--off-white);
+  font-weight: 400;
+}
+.pricing-table th:not(:first-child) { text-align: center; }
+.pricing-table td {
+  padding: 20px 24px;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  border-bottom: 1px solid var(--warm-grey);
+  vertical-align: middle;
+}
+.pricing-table td:not(:first-child) { text-align: center; }
+.pricing-table tr:hover td { background: #EDEAE4; }
+.pricing-table .show-range {
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  color: var(--black);
+}
+.pricing-table .fee {
+  font-weight: 700;
+  color: var(--black);
+  font-size: 13px;
+}
+.pricing-table .fee-note {
+  display: block;
+  font-size: 8px;
+  letter-spacing: 0.12em;
+  color: var(--mid-grey);
+  margin-top: 3px;
+  font-weight: 400;
+}
+.pricing-table .highlight-col {
+  background: #F7F5F0;
+}
+.pricing-table thead th.highlight-col {
+  background: var(--gold);
+  color: var(--black);
+}
+
+.pricing-footer {
+  margin-top: 32px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 24px 28px;
+  background: var(--black);
+}
+.pricing-footer .pf-bar { width: 3px; height: 28px; background: var(--gold); flex-shrink: 0; }
+.pricing-footer .pf-text {
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--warm-grey);
+}
+.pricing-footer .pf-text strong { color: var(--gold); font-weight: 700; }
+
+/* ═══════════════════════════════════════
+   TEAM
+═══════════════════════════════════════ */
+#team {
+  background: var(--deep-grey);
+  color: var(--off-white);
+}
+#team .section-title { color: var(--off-white); }
+
+.team-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1px;
+  background: var(--black);
+  margin-top: 60px;
+}
+.team-card {
+  background: var(--deep-grey);
+  padding: 40px 36px;
+  position: relative;
+  overflow: hidden;
+  transition: background 0.25s;
+}
+.team-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 2px;
+  background: var(--gold);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.4s ease;
+}
+.team-card:hover { background: #222120; }
+.team-card:hover::before { transform: scaleX(1); }
+
+.tc-logo { margin-bottom: 24px; }
+.tc-name {
+  font-weight: 700;
+  font-size: 14px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--off-white);
+  margin-bottom: 4px;
+}
+.tc-role {
+  font-size: 9px;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 20px;
+}
+.tc-bio {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 13px;
+  color: var(--mid-grey);
+  line-height: 1.7;
+}
+
+.advisory-block {
+  margin-top: 64px;
+}
+.advisory-title {
+  font-size: 9px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 28px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.advisory-title::after { content: ''; flex: 1; height: 1px; background: var(--black); }
+
+.advisory-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1px;
+  background: var(--black);
+}
+.advisory-card {
+  background: var(--deep-grey);
+  padding: 28px 24px;
+  transition: background 0.2s;
+}
+.advisory-card:hover { background: #222120; }
+.ac-name {
+  font-weight: 700;
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--off-white);
+  margin-bottom: 4px;
+}
+.ac-role {
+  font-size: 9px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 12px;
+}
+.ac-bg {
+  font-size: 10px;
+  color: var(--mid-grey);
+  line-height: 1.7;
+  letter-spacing: 0.04em;
+}
+
+.network-strip {
+  margin-top: 48px;
+  background: var(--black);
+  padding: 32px 36px;
+  display: flex;
+  align-items: center;
+  gap: 28px;
+  flex-wrap: wrap;
+}
+.ns-label {
+  font-size: 9px;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--gold);
+  flex-shrink: 0;
+}
+.ns-bar { width: 3px; height: 20px; background: var(--gold); flex-shrink: 0; }
+.ns-tags { display: flex; gap: 8px; flex-wrap: wrap; }
+.ns-tag {
+  font-size: 8px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--mid-grey);
+  padding: 6px 12px;
+  border: 1px solid var(--deep-grey);
+}
+
+/* ═══════════════════════════════════════
+   CONTACT
+═══════════════════════════════════════ */
+#contact {
+  background: var(--black);
+  color: var(--off-white);
+  border-bottom: none;
+}
+#contact .section-title { color: var(--off-white); }
+
+.contact-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 80px;
+  margin-top: 56px;
+}
+.contact-left {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+.contact-intro {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 19px;
+  color: var(--warm-grey);
+  line-height: 1.55;
+}
+.contact-details {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  background: var(--deep-grey);
+}
+.cd-row {
+  background: var(--black);
+  padding: 18px 22px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  transition: background 0.2s;
+}
+.cd-row:hover { background: #121210; }
+.cd-label {
+  font-size: 9px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--gold);
+  width: 80px;
+  flex-shrink: 0;
+}
+.cd-value {
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  color: var(--warm-grey);
+}
+
+.contact-right {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.contact-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  background: var(--deep-grey);
+}
+.cf-field {
+  background: var(--black);
+  display: flex;
+  flex-direction: column;
+}
+.cf-label {
+  font-size: 8px;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--gold);
+  padding: 14px 20px 0;
+}
+.cf-input, .cf-textarea {
+  background: transparent;
+  border: none;
+  outline: none;
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  color: var(--off-white);
+  padding: 8px 20px 16px;
+  resize: none;
+}
+.cf-input::placeholder, .cf-textarea::placeholder { color: var(--mid-grey); }
+.cf-textarea { min-height: 100px; }
+.cf-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--deep-grey); }
+
+.cf-submit {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--black);
+  background: var(--gold);
+  border: none;
+  padding: 18px 32px;
+  cursor: none;
+  text-align: left;
+  transition: background 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.cf-submit:hover { background: var(--gold-light); }
+.cf-submit::after { content: '→'; font-size: 14px; margin-left: auto; }
+
+/* ═══════════════════════════════════════
+   FOOTER
+═══════════════════════════════════════ */
+footer {
+  background: var(--black);
+  padding: 48px 80px;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 60px;
+  align-items: center;
+  border-top: 3px solid var(--gold);
+}
+.footer-links {
+  display: flex;
+  gap: 32px;
+  list-style: none;
+  justify-content: center;
+}
+.footer-links a {
+  font-size: 8px;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--mid-grey);
+  transition: color 0.2s;
+}
+.footer-links a:hover { color: var(--gold); }
+.footer-copy {
+  font-size: 8px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--mid-grey);
+  text-align: right;
+}
+
+/* ═══════════════════════════════════════
+   RESPONSIVE
+═══════════════════════════════════════ */
+@media (max-width: 1024px) {
+  section { padding: 80px 48px; }
+  #hero { grid-template-columns: 1fr; min-height: auto; }
+  .hero-right { display: none; }
+  .about-grid, .services-intro, .pricing-header, .contact-grid { grid-template-columns: 1fr; gap: 48px; }
+  .desks-grid { grid-template-columns: 1fr; }
+  .team-grid { grid-template-columns: 1fr; }
+  .advisory-grid { grid-template-columns: 1fr 1fr; }
+  footer { grid-template-columns: 1fr; gap: 24px; text-align: center; }
+  .footer-links { justify-content: center; }
+  .footer-copy { text-align: center; }
+}
+
+@media (max-width: 768px) {
+  nav { padding: 0 24px; }
+  .nav-links, .nav-cta { display: none; }
+  .nav-mobile-btn { display: flex; }
+  section { padding: 72px 28px; }
+  .hero-left { padding: calc(var(--nav-h) + 48px) 28px 60px; }
+  .advisory-grid { grid-template-columns: 1fr; }
+  .pricing-table th, .pricing-table td { padding: 14px 16px; }
+  footer { padding: 40px 28px; }
+  body { cursor: auto; }
+  .cursor { display: none; }
+}
+</style>
+</head>
+<body>
+
+<!-- CURSOR -->
+<div class="cursor" id="cursorDot" style="position:fixed;pointer-events:none;z-index:9999;top:0;left:0;">
+  <div class="cursor-dot"></div>
+</div>
+<div class="cursor" id="cursorRing" style="position:fixed;pointer-events:none;z-index:9998;top:0;left:0;">
+  <div class="cursor-ring" id="ringEl"></div>
+</div>
+
+<!-- ═══════════════════════════════════════
+     NAVIGATION
+═══════════════════════════════════════ -->
+<nav id="mainNav">
+  <a href="#hero">
+    <div class="logo sm dark">
+      <div class="lw"><span class="lp">PIL</span><span class="lb"></span><span class="ll">LAR</span></div>
+      <div class="lr"></div>
+      <span class="lo">OPS</span>
+    </div>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#services">Services</a></li>
+    <li><a href="#pricing">Pricing</a></li>
+    <li><a href="#team">Team</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <a href="#contact" class="nav-cta">Get in Touch</a>
+  <button class="nav-mobile-btn" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+
+<!-- ═══════════════════════════════════════
+     HERO
+═══════════════════════════════════════ -->
+<section id="hero">
+  <div class="hero-left">
+    <div>
+      <p class="hero-tagline reveal">Touring Infrastructure · Est. 2026</p>
+      <h1 class="hero-headline reveal reveal-delay-1">
+        BEYOND<br>THE<br><span class="gold">BOOKING</span>
+      </h1>
+    </div>
+    <div class="hero-sub">
+      <p class="hero-desc reveal reveal-delay-2">
+        Operational infrastructure for artists, managers and teams touring internationally. We run the show — from confirmed booking to showtime.
+      </p>
+      <div class="hero-ctas reveal reveal-delay-3">
+        <a href="#services" class="btn-primary">Our Services</a>
+        <a href="#contact" class="btn-ghost">Start a Conversation</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="hero-right">
+    <div class="hero-logo-wrap reveal reveal-delay-2">
+      <div class="logo lg dark">
+        <div class="lw"><span class="lp">PIL</span><span class="lb"></span><span class="ll">LAR</span></div>
+        <div class="lr"></div>
+        <span class="lo">OPS</span>
+      </div>
+    </div>
+
+    <div class="hero-bg-text">OPS</div>
+
+    <div class="hero-stats reveal reveal-delay-3">
+      <div class="hero-stat">
+        <div class="hero-stat-num">26<span>+</span></div>
+        <div class="hero-stat-label">Years Industry Experience</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-num">3</div>
+        <div class="hero-stat-label">Operational Desks</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-num">€0</div>
+        <div class="hero-stat-label">Commission on Bookings</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-num">1<span>st</span></div>
+        <div class="hero-stat-label">Show Minimum</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="scroll-hint">
+    <span>Scroll</span>
+    <div class="arrow"></div>
+  </div>
+</section>
+
+
+<!-- TICKER -->
+<div class="ticker">
+  <div class="ticker-track">
+    <span>Touring Infrastructure</span><span class="sep">|</span>
+    <span>Beyond the Booking</span><span class="sep">|</span>
+    <span>Contract to Showtime</span><span class="sep">|</span>
+    <span>Independent Artists</span><span class="sep">|</span>
+    <span>Global Operations</span><span class="sep">|</span>
+    <span>No Commission</span><span class="sep">|</span>
+    <span>PIL|LAR OPS</span><span class="sep">|</span>
+    <span>Touring Infrastructure</span><span class="sep">|</span>
+    <span>Beyond the Booking</span><span class="sep">|</span>
+    <span>Contract to Showtime</span><span class="sep">|</span>
+    <span>Independent Artists</span><span class="sep">|</span>
+    <span>Global Operations</span><span class="sep">|</span>
+    <span>No Commission</span><span class="sep">|</span>
+    <span>PIL|LAR OPS</span><span class="sep">|</span>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════
+     ABOUT
+═══════════════════════════════════════ -->
+<section id="about">
+  <div class="about-grid">
+    <div>
+      <p class="section-eyebrow reveal">About Pillar Ops</p>
+      <h2 class="section-title reveal reveal-delay-1">THE OPERATIONAL<br>BACKBONE.</h2>
+      <p class="about-body reveal reveal-delay-2">
+        Pillar Ops is operational infrastructure for artists, managers and teams who organise shows worldwide. We handle the professional execution of confirmed shows — without acting as a booking agency or taking commission on bookings.
+      </p>
+      <p class="about-detail reveal reveal-delay-3">
+        Our role begins the moment a show is confirmed. From that point, we support artists and their teams with the full operational execution of tours and performances. The live industry is growing globally. Artists operate increasingly internationally and take more control of their own careers — creating a new category: the independent international artist with direct relationships with promoters, but no dedicated operations layer.<br><br>
+        Pillar Ops was built to fill exactly that gap.
+      </p>
+      <a href="#services" class="btn-primary reveal reveal-delay-4" style="display:inline-block;">View Our Services →</a>
+    </div>
+
+    <div class="about-right">
+      <div class="pillars-list reveal reveal-delay-1">
+        <div class="pillar-item">
+          <span class="pi-num">01</span>
+          <span class="pi-text">Travel Planning & Itineraries</span>
+          <span class="pi-arrow">→</span>
+        </div>
+        <div class="pillar-item">
+          <span class="pi-num">02</span>
+          <span class="pi-text">Promoter Communication</span>
+          <span class="pi-arrow">→</span>
+        </div>
+        <div class="pillar-item">
+          <span class="pi-num">03</span>
+          <span class="pi-text">Contract Administration</span>
+          <span class="pi-arrow">→</span>
+        </div>
+        <div class="pillar-item">
+          <span class="pi-num">04</span>
+          <span class="pi-text">Payment Follow-up</span>
+          <span class="pi-arrow">→</span>
+        </div>
+        <div class="pillar-item">
+          <span class="pi-num">05</span>
+          <span class="pi-text">Visa Support</span>
+          <span class="pi-arrow">→</span>
+        </div>
+      </div>
+
+      <div class="manifesto-block reveal reveal-delay-2">
+        <p>"The role of Pillar begins where the booking ends. We run the show."</p>
+        <cite>— Pillar Ops · Brand Manifesto</cite>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════
+     SERVICES
+═══════════════════════════════════════ -->
+<section id="services">
+  <div class="services-intro">
+    <div>
+      <p class="section-eyebrow reveal">Services</p>
+      <h2 class="section-title reveal reveal-delay-1">THREE<br>OPERATIONAL<br>DESKS.</h2>
+    </div>
+    <div class="reveal reveal-delay-2">
+      <p class="services-intro-text">
+        Pillar Ops works with three modular operational desks. Each desk solves a specific problem within the workflow of international shows.
+      </p>
+      <p class="services-intro-note" style="margin-top:24px;">
+        The desks can be used separately or combined.<br>
+        From contract to showtime — we own the execution.
+      </p>
+    </div>
+  </div>
+
+  <div class="desks-grid">
+
+    <div class="desk reveal">
+      <div class="desk-logo">
+        <div class="logo xs dark">
+          <div class="lw"><span class="lp">PIL</span><span class="lb"></span><span class="ll">LAR</span></div>
+          <div class="lr"></div>
+          <span class="lo">OPS</span>
+        </div>
+      </div>
+      <div class="desk-n">DESK 01</div>
+      <div class="desk-t">Full Ops<br>Desk</div>
+      <div class="desk-d">Complete operational support from a confirmed show. Designed for artists who receive bookings but have no in-house operations team. Pillar acts as the artist's external operations department.</div>
+      <div class="desk-scope">
+        <div class="desk-scope-item">Contract & Administration</div>
+        <div class="desk-scope-item">Travel & Planning</div>
+        <div class="desk-scope-item">Show Coordination</div>
+        <div class="desk-scope-item">Visa Support</div>
+        <div class="desk-scope-item">Finance & Settlement</div>
+      </div>
+    </div>
+
+    <div class="desk reveal reveal-delay-1">
+      <div class="desk-logo">
+        <div class="logo xs dark">
+          <div class="lw"><span class="lp">PIL</span><span class="lb"></span><span class="ll">LAR</span></div>
+          <div class="lr"></div>
+          <span class="lo">OPS</span>
+        </div>
+      </div>
+      <div class="desk-n">DESK 02</div>
+      <div class="desk-t">Tour Logistics<br>Desk</div>
+      <div class="desk-d">Fully focused on travel planning and show scheduling. For artists who manage contracts through a manager or agent, but need support organising travel and planning.</div>
+      <div class="desk-scope">
+        <div class="desk-scope-item">Flight, Hotel & Transport</div>
+        <div class="desk-scope-item">Itinerary Management</div>
+        <div class="desk-scope-item">Promoter Coordination</div>
+        <div class="desk-scope-item">Visa Coordination</div>
+        <div class="desk-scope-item">Travel Documentation</div>
+      </div>
+    </div>
+
+    <div class="desk reveal reveal-delay-2">
+      <div class="desk-logo">
+        <div class="logo xs dark">
+          <div class="lw"><span class="lp">PIL</span><span class="lb"></span><span class="ll">LAR</span></div>
+          <div class="lr"></div>
+          <span class="lo">OPS</span>
+        </div>
+      </div>
+      <div class="desk-n">DESK 03</div>
+      <div class="desk-t">Finance &<br>Contracting Desk</div>
+      <div class="desk-d">The administrative backbone of tours. Many artists manage their own travel but lack a structured way to handle contracts and payments. We solve that.</div>
+      <div class="desk-scope">
+        <div class="desk-scope-item">Contract Management</div>
+        <div class="desk-scope-item">Financial Administration</div>
+        <div class="desk-scope-item">Invoice & Deposits</div>
+        <div class="desk-scope-item">Settlement Control</div>
+        <div class="desk-scope-item">Post-Show Archiving</div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════
+     PRICING
+═══════════════════════════════════════ -->
+<section id="pricing">
+  <div class="pricing-header">
+    <div>
+      <p class="section-eyebrow reveal">Pricing</p>
+      <h2 class="section-title reveal reveal-delay-1">FIXED FEES.<br>NO COMMISSION.</h2>
+    </div>
+    <div class="reveal reveal-delay-2">
+      <p class="pricing-note">
+        Pillar charges a fixed operational fee per confirmed show. No retainers, no exclusivity, no commission on bookings.
+      </p>
+      <p class="pricing-rule" style="margin-top:20px;">
+        Minimum show fee: €2.000<br>
+        Desks can be combined<br>
+        Fee is per confirmed date<br>
+        Invoiced after show confirmation
+      </p>
+    </div>
+  </div>
+
+  <div class="reveal">
+    <table class="pricing-table">
+      <thead>
+        <tr>
+          <th>Show Fee</th>
+          <th class="highlight-col">Full Ops Desk</th>
+          <th>Tour Logistics</th>
+          <th>Finance & Contracting</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span class="show-range">€2k – €5k</span></td>
+          <td class="highlight-col"><span class="fee">€175<span class="fee-note">All-in ops</span></span></td>
+          <td><span class="fee">€100<span class="fee-note">Travel & planning</span></span></td>
+          <td><span class="fee">€100<span class="fee-note">Finance & admin</span></span></td>
+        </tr>
+        <tr>
+          <td><span class="show-range">€5k – €15k</span></td>
+          <td class="highlight-col"><span class="fee">€350<span class="fee-note">All-in ops</span></span></td>
+          <td><span class="fee">€200<span class="fee-note">Travel & planning</span></span></td>
+          <td><span class="fee">€150<span class="fee-note">Finance & admin</span></span></td>
+        </tr>
+        <tr>
+          <td><span class="show-range">€15k – €40k</span></td>
+          <td class="highlight-col"><span class="fee">€550<span class="fee-note">All-in ops</span></span></td>
+          <td><span class="fee">€350<span class="fee-note">Travel & planning</span></span></td>
+          <td><span class="fee">€250<span class="fee-note">Finance & admin</span></span></td>
+        </tr>
+        <tr>
+          <td><span class="show-range">€40k+</span></td>
+          <td class="highlight-col"><span class="fee">€750<span class="fee-note">All-in ops</span></span></td>
+          <td><span class="fee">€550<span class="fee-note">Travel & planning</span></span></td>
+          <td><span class="fee">€350<span class="fee-note">Finance & admin</span></span></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="pricing-footer">
+      <div class="pf-bar"></div>
+      <p class="pf-text">
+        All fees are <strong>per confirmed show</strong>. Desks can be combined. <strong>No retainers. No exclusivity. No commission on bookings.</strong>
+      </p>
+      <a href="#contact" class="btn-primary" style="flex-shrink:0; white-space:nowrap;">Get a Quote</a>
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════
+     TEAM
+═══════════════════════════════════════ -->
+<section id="team">
+  <p class="section-eyebrow reveal">Team & Advisory</p>
+  <h2 class="section-title reveal reveal-delay-1">26 YEARS OF<br>INDUSTRY<br>EXPERIENCE.</h2>
+  <p style="font-family:var(--serif); font-style:italic; font-size:18px; color:var(--warm-grey); line-height:1.55; max-width:620px; margin-top:16px;" class="reveal reveal-delay-2">
+    Pillar Ops was built from over 26 years of experience in the international music industry — from artist booking and management to festival programming and international touring.
+  </p>
+
+  <div class="team-grid">
+    <div class="team-card reveal">
+      <div class="tc-logo">
+        <div class="logo xs dark">
+          <div class="lw"><span class="lp">PIL</span><span class="lb"></span><span class="ll">LAR</span></div>
+          <div class="lr"></div>
+          <span class="lo">OPS</span>
+        </div>
+      </div>
+      <div class="tc-name">Founder</div>
+      <div class="tc-role">Operations Lead</div>
+      <div class="tc-bio">26+ years in the international music industry. Background spanning artist booking, artist management, tour management, festival and club programming, and international touring of electronic artists.</div>
+    </div>
+    <div class="team-card reveal reveal-delay-1">
+      <div class="tc-logo">
+        <div class="logo xs dark">
+          <div class="lw"><span class="lp">PIL</span><span class="lb"></span><span class="ll">LAR</span></div>
+          <div class="lr"></div>
+          <span class="lo">OPS</span>
+        </div>
+      </div>
+      <div class="tc-name">Operations Team</div>
+      <div class="tc-role">Touring & Logistics</div>
+      <div class="tc-bio">A lean, dedicated team of touring professionals with hands-on experience across international touring operations, visa processing, travel logistics and show coordination across all major global markets.</div>
+    </div>
+  </div>
+
+  <div class="advisory-block reveal">
+    <div class="advisory-title">Advisory Board</div>
+    <div class="advisory-grid">
+      <div class="advisory-card">
+        <div class="ac-name">Artist Management</div>
+        <div class="ac-role">Advisory</div>
+        <div class="ac-bg">Senior experience in international artist management and career strategy for independent acts.</div>
+      </div>
+      <div class="advisory-card">
+        <div class="ac-name">Touring Operations</div>
+        <div class="ac-role">Advisory</div>
+        <div class="ac-bg">Specialist background in global touring operations, production coordination and tour management.</div>
+      </div>
+      <div class="advisory-card">
+        <div class="ac-name">Booking & Agency</div>
+        <div class="ac-role">Advisory</div>
+        <div class="ac-bg">Extensive background in international booking agencies and direct promoter relationships across Europe and beyond.</div>
+      </div>
+      <div class="advisory-card">
+        <div class="ac-name">Festival & Production</div>
+        <div class="ac-role">Advisory</div>
+        <div class="ac-bg">Deep expertise in festival organisation, stage management and production across major international events.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="network-strip reveal">
+    <span class="ns-label">Global Network</span>
+    <div class="ns-bar"></div>
+    <div class="ns-tags">
+      <span class="ns-tag">Tour Managers</span>
+      <span class="ns-tag">Visa Consultants</span>
+      <span class="ns-tag">Security</span>
+      <span class="ns-tag">Freelance Booking Agents</span>
+      <span class="ns-tag">Production Professionals</span>
+      <span class="ns-tag">Local Tour Coordinators</span>
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════
+     CONTACT
+═══════════════════════════════════════ -->
+<section id="contact">
+  <p class="section-eyebrow reveal">Contact</p>
+  <h2 class="section-title reveal reveal-delay-1">LET'S TALK<br>ABOUT YOUR<br>NEXT TOUR.</h2>
+
+  <div class="contact-grid">
+    <div class="contact-left">
+      <p class="contact-intro reveal">
+        The role of Pillar begins when a show is confirmed. Get in touch to discuss how we can support your next tour or series of shows.
+      </p>
+
+      <div class="contact-details reveal reveal-delay-1">
+        <div class="cd-row">
+          <span class="cd-label">Email</span>
+          <span class="cd-value"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="84edeae2ebc4f4ede8e8e5f6ebf4f7aae7ebe9">[email&#160;protected]</a></span>
+        </div>
+        <div class="cd-row">
+          <span class="cd-label">Location</span>
+          <span class="cd-value">Amsterdam, Netherlands</span>
+        </div>
+        <div class="cd-row">
+          <span class="cd-label">Response</span>
+          <span class="cd-value">Within 24 hours</span>
+        </div>
+        <div class="cd-row">
+          <span class="cd-label">Website</span>
+          <span class="cd-value">pillarops.com</span>
+        </div>
+      </div>
+
+      <div style="margin-top:8px;" class="reveal reveal-delay-2">
+        <div class="logo md dark">
+          <div class="lw"><span class="lp">PIL</span><span class="lb"></span><span class="ll">LAR</span></div>
+          <div class="lr"></div>
+          <span class="lo">OPS</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="contact-right reveal reveal-delay-2">
+      <div class="contact-form">
+        <div class="cf-row">
+          <div class="cf-field">
+            <label class="cf-label">Name</label>
+            <input class="cf-input" type="text" placeholder="Your name">
+          </div>
+          <div class="cf-field">
+            <label class="cf-label">Email</label>
+            <input class="cf-input" type="email" placeholder="your@email.com">
+          </div>
+        </div>
+        <div class="cf-row">
+          <div class="cf-field">
+            <label class="cf-label">Artist / Project</label>
+            <input class="cf-input" type="text" placeholder="Artist or project name">
+          </div>
+          <div class="cf-field">
+            <label class="cf-label">Desk</label>
+            <input class="cf-input" type="text" placeholder="Full Ops / Logistics / Finance">
+          </div>
+        </div>
+        <div class="cf-field">
+          <label class="cf-label">Message</label>
+          <textarea class="cf-textarea" placeholder="Tell us about your upcoming tour or shows..."></textarea>
+        </div>
+        <button class="cf-submit">Send Message</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════
+     FOOTER
+═══════════════════════════════════════ -->
+<footer>
+  <div class="logo sm dark">
+    <div class="lw"><span class="lp">PIL</span><span class="lb"></span><span class="ll">LAR</span></div>
+    <div class="lr"></div>
+    <span class="lo">OPS</span>
+  </div>
+  <ul class="footer-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#services">Services</a></li>
+    <li><a href="#pricing">Pricing</a></li>
+    <li><a href="#team">Team</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <p class="footer-copy">© 2026 Pillar Ops<br>Touring Infrastructure</p>
+</footer>
+
+
+<!-- ═══════════════════════════════════════
+     JS
+═══════════════════════════════════════ -->
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+// — Custom Cursor —
+const dot  = document.getElementById('cursorDot');
+const ring = document.getElementById('cursorRing');
+const ringEl = document.getElementById('ringEl');
+let mx = 0, my = 0, rx = 0, ry = 0;
+
+document.addEventListener('mousemove', e => {
+  mx = e.clientX; my = e.clientY;
+  dot.style.left  = mx + 'px';
+  dot.style.top   = my + 'px';
+});
+
+function animateRing() {
+  rx += (mx - rx) * 0.12;
+  ry += (my - ry) * 0.12;
+  ring.style.left = rx + 'px';
+  ring.style.top  = ry + 'px';
+  requestAnimationFrame(animateRing);
+}
+animateRing();
+
+document.querySelectorAll('a, button, .desk-card, .pillar-item, .team-card').forEach(el => {
+  el.addEventListener('mouseenter', () => ringEl.classList.add('hovered'));
+  el.addEventListener('mouseleave', () => ringEl.classList.remove('hovered'));
+});
+
+// — Scroll: nav active + scrolled state —
+const nav = document.getElementById('mainNav');
+const sections = document.querySelectorAll('section[id]');
+const navLinks = document.querySelectorAll('.nav-links a');
+
+window.addEventListener('scroll', () => {
+  // Scrolled state
+  nav.classList.toggle('scrolled', window.scrollY > 60);
+
+  // Active link
+  let current = '';
+  sections.forEach(s => {
+    if (window.scrollY >= s.offsetTop - 100) current = s.id;
+  });
+  navLinks.forEach(a => {
+    a.classList.toggle('active', a.getAttribute('href') === '#' + current);
+  });
+});
+
+// — Reveal on scroll —
+const reveals = document.querySelectorAll('.reveal');
+const io = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) { e.target.classList.add('visible'); io.unobserve(e.target); }
+  });
+}, { threshold: 0.12 });
+reveals.forEach(r => io.observe(r));
+
+// — Smooth scroll for all anchors —
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+  a.addEventListener('click', e => {
+    e.preventDefault();
+    const t = document.querySelector(a.getAttribute('href'));
+    if (t) t.scrollIntoView({ behavior: 'smooth' });
+  });
+});
+
+// — Form submit —
+document.querySelector('.cf-submit').addEventListener('click', () => {
+  const name  = document.querySelector('.cf-input[type="text"]').value.trim();
+  const email = document.querySelector('.cf-input[type="email"]').value.trim();
+  if (!name || !email) {
+    alert('Please fill in at least your name and email.');
+    return;
+  }
+  alert('Message sent! We\'ll get back to you within 24 hours.');
+});
+</script>
+</body>
+</html>
