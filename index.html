@@ -244,6 +244,26 @@ section {
   grid-template-columns: 1fr 1fr;
   border-bottom: none;
   overflow: hidden;
+  position: relative;
+}
+
+/* Falling pattern canvas */
+#falling-pattern {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0;
+  transition: opacity 1.2s ease;
+}
+#falling-pattern.ready { opacity: 1; }
+
+.hero-left,
+.hero-right {
+  position: relative;
+  z-index: 1;
 }
 
 .hero-left {
@@ -1109,6 +1129,7 @@ footer {
      HERO
 ═══════════════════════════════════════ -->
 <section id="hero">
+  <canvas id="falling-pattern"></canvas>
   <div class="hero-left">
     <div>
       <p class="hero-tagline reveal">Touring Infrastructure · Est. 2026</p>
@@ -1667,6 +1688,109 @@ document.querySelector('.cf-submit').addEventListener('click', () => {
   }
   alert('Message sent! We\'ll get back to you within 24 hours.');
 });
+
+// — Falling Pattern —
+(function() {
+  const canvas = document.getElementById('falling-pattern');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+
+  // Gold palette matching brand
+  const GOLD      = 'rgba(139,125,85,';
+  const GOLD_LITE = 'rgba(184,168,128,';
+
+  // Column config: spacing 38px, lines fall at random speeds
+  const COL_W = 38;
+  const DOT_CHANCE = 0.018; // probability a dot appears per cell per frame
+
+  let W, H, cols;
+  let drops = [];
+
+  function setup() {
+    W = canvas.offsetWidth;
+    H = canvas.offsetHeight;
+    canvas.width  = W;
+    canvas.height = H;
+    cols  = Math.ceil(W / COL_W) + 1;
+
+    drops = Array.from({ length: cols }, (_, i) => ({
+      x:       i * COL_W + COL_W * 0.5,
+      y:       -Math.random() * H,        // start above viewport at random offset
+      speed:   28 + Math.random() * 55,   // px/s
+      length:  60 + Math.random() * 120,  // tail length px
+      opacity: 0.18 + Math.random() * 0.28,
+      dot:     Math.random() < 0.5,       // some columns have a bright dot at head
+    }));
+  }
+
+  let last = 0;
+
+  function draw(ts) {
+    const dt = Math.min((ts - last) / 1000, 0.05);
+    last = ts;
+
+    // Fade trail — very dark overlay instead of clearRect to keep tails
+    ctx.fillStyle = 'rgba(10,10,8,0.18)';
+    ctx.fillRect(0, 0, W, H);
+
+    drops.forEach(d => {
+      d.y += d.speed * dt;
+
+      // Draw tail: vertical gradient line
+      const tailTop = d.y - d.length;
+      const grad = ctx.createLinearGradient(d.x, tailTop, d.x, d.y);
+      grad.addColorStop(0,   GOLD + '0)');
+      grad.addColorStop(0.6, GOLD + (d.opacity * 0.5).toFixed(3) + ')');
+      grad.addColorStop(1,   GOLD + d.opacity.toFixed(3) + ')');
+
+      ctx.beginPath();
+      ctx.moveTo(d.x, tailTop);
+      ctx.lineTo(d.x, d.y);
+      ctx.strokeStyle = grad;
+      ctx.lineWidth = 1.5;
+      ctx.stroke();
+
+      // Bright dot at the head
+      if (d.dot) {
+        ctx.beginPath();
+        ctx.arc(d.x, d.y, 1.8, 0, Math.PI * 2);
+        ctx.fillStyle = GOLD_LITE + '0.9)';
+        ctx.fill();
+      }
+
+      // Reset when off bottom
+      if (d.y - d.length > H) {
+        d.y      = -Math.random() * H * 0.4;
+        d.speed  = 28 + Math.random() * 55;
+        d.length = 60 + Math.random() * 120;
+        d.opacity= 0.18 + Math.random() * 0.28;
+        d.dot    = Math.random() < 0.5;
+      }
+    });
+
+    // Scattered static dots — faint grid feel
+    if (Math.random() < 0.3) {
+      const sx = Math.random() * W;
+      const sy = Math.random() * H;
+      ctx.beginPath();
+      ctx.arc(sx, sy, 0.8, 0, Math.PI * 2);
+      ctx.fillStyle = GOLD + '0.12)';
+      ctx.fill();
+    }
+
+    requestAnimationFrame(draw);
+  }
+
+  setup();
+  window.addEventListener('resize', setup);
+
+  // Fade in once first frame drawn
+  requestAnimationFrame(ts => {
+    last = ts;
+    draw(ts);
+    canvas.classList.add('ready');
+  });
+})();
 </script>
 </body>
 </html>
