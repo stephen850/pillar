@@ -259,11 +259,11 @@ section {
 }
 
 .hero-left {
-  padding: calc(var(--nav-h) + 80px) 80px 80px;
+  padding: calc(var(--nav-h) + 80px) 80px 160px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  border-right: 1px solid rgba(255,255,255,0.06);
+  border-right: none;
   position: relative;
 }
 .hero-left::before {
@@ -285,11 +285,11 @@ section {
 }
 
 .hero-headline {
-  font-family: var(--mono);
-  font-weight: 700;
-  font-size: clamp(52px, 6.5vw, 96px);
-  letter-spacing: -0.04em;
-  line-height: 0.88;
+  font-family: var(--serif);
+  font-weight: 400;
+  font-size: clamp(68px, 8.5vw, 128px);
+  letter-spacing: -0.01em;
+  line-height: 0.92;
   color: var(--off-white);
   flex: 1;
   display: flex;
@@ -346,7 +346,6 @@ section {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  position: relative;
   overflow: hidden;
 }
 
@@ -371,19 +370,26 @@ section {
 }
 
 .hero-stats {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 1px;
-  background: rgba(255,255,255,0.08);
-  margin-top: auto;
-  position: relative;
-  z-index: 1;
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0;
+  background: rgba(10,10,8,0.88);
+  border-top: 1px solid var(--gold);
+  z-index: 2;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
 }
 .hero-stat {
-  background: rgba(10,10,8,0.72);
-  padding: 28px 24px;
+  background: transparent;
+  padding: 28px 40px;
+  border-right: 1px solid rgba(255,255,255,0.08);
+}
+.hero-stat:last-child {
+  border-right: none;
 }
 .hero-stat-num {
   font-family: var(--mono);
@@ -1155,23 +1161,24 @@ footer {
 
     <div class="hero-bg-text" style="display:none;">DESK</div>
 
-    <div class="hero-stats reveal reveal-delay-3">
-      <div class="hero-stat">
-        <div class="hero-stat-num">26<span>+</span></div>
-        <div class="hero-stat-label">Years Industry Experience</div>
-      </div>
-      <div class="hero-stat">
-        <div class="hero-stat-num">4</div>
-        <div class="hero-stat-label">Operational Desks</div>
-      </div>
-      <div class="hero-stat">
-        <div class="hero-stat-num">€0</div>
-        <div class="hero-stat-label">Commission on Bookings</div>
-      </div>
-      <div class="hero-stat">
-        <div class="hero-stat-num">1<span>st</span></div>
-        <div class="hero-stat-label">Show Minimum</div>
-      </div>
+  </div>
+
+  <div class="hero-stats reveal reveal-delay-3">
+    <div class="hero-stat">
+      <div class="hero-stat-num">26<span>+</span></div>
+      <div class="hero-stat-label">Years Industry Experience</div>
+    </div>
+    <div class="hero-stat">
+      <div class="hero-stat-num">4</div>
+      <div class="hero-stat-label">Operational Desks</div>
+    </div>
+    <div class="hero-stat">
+      <div class="hero-stat-num">€0</div>
+      <div class="hero-stat-label">Commission on Bookings</div>
+    </div>
+    <div class="hero-stat">
+      <div class="hero-stat-num">1<span>st</span></div>
+      <div class="hero-stat-label">Show Minimum</div>
     </div>
   </div>
 
