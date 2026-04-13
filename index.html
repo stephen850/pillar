@@ -678,6 +678,46 @@ section {
   border-radius: 50%;
   flex-shrink: 0;
 }
+.desk-deliverables {
+  margin-top: 24px;
+  padding-top: 20px;
+  border-top: 1px solid var(--deep-grey);
+}
+.desk-deliverables-label {
+  font-size: 9px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 12px;
+  display: block;
+}
+.desk-deliverables-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.desk-deliverable-item {
+  font-size: 10px;
+  letter-spacing: 0.05em;
+  color: var(--off-white);
+  font-family: var(--mono);
+  line-height: 1.5;
+}
+.desk-anchor {
+  margin-top: 20px;
+  padding: 12px 14px;
+  border: 1px solid var(--gold);
+  background: rgba(139, 125, 85, 0.06);
+  font-size: 10px;
+  letter-spacing: 0.05em;
+  color: var(--gold-light);
+  font-family: var(--mono);
+  line-height: 1.5;
+}
+.desk-anchor strong {
+  color: var(--gold);
+  font-weight: 700;
+}
 
 /* ═══════════════════════════════════════
    PRICING
@@ -1007,6 +1047,25 @@ section {
 }
 .cf-input::placeholder, .cf-textarea::placeholder { color: var(--mid-grey); }
 .cf-textarea { min-height: 100px; }
+.cf-select {
+  width: 100%;
+  background: var(--black);
+  border: 0;
+  padding: 16px 18px;
+  color: var(--off-white);
+  font-family: var(--mono);
+  font-size: 12px;
+  letter-spacing: 0.02em;
+  outline: none;
+  appearance: none;
+  -webkit-appearance: none;
+  background-image: linear-gradient(45deg, transparent 50%, var(--gold) 50%), linear-gradient(135deg, var(--gold) 50%, transparent 50%);
+  background-position: calc(100% - 18px) 50%, calc(100% - 13px) 50%;
+  background-size: 5px 5px, 5px 5px;
+  background-repeat: no-repeat;
+  cursor: pointer;
+}
+.cf-select:focus { border-bottom: 1px solid var(--gold); }
 .cf-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--deep-grey); }
 
 .cf-submit {
@@ -1330,10 +1389,20 @@ footer {
       <div class="desk-d">Complete operational support from a confirmed engagement. Designed for artists, athletes and principals who receive bookings but have no in-house operations team. PillarDesk acts as your external operations department.</div>
       <div class="desk-scope">
         <div class="desk-scope-item">Contract & Administration</div>
-        <div class="desk-scope-item">Travel & Planning</div>
-        <div class="desk-scope-item">Show Coordination</div>
+        <div class="desk-scope-item">Advancing & Promoter Coordination</div>
+        <div class="desk-scope-item">Travel & Itinerary Planning</div>
         <div class="desk-scope-item">Visa Support</div>
-        <div class="desk-scope-item">Finance & Settlement</div>
+        <div class="desk-scope-item">Settlement & Payment Control</div>
+      </div>
+      <div class="desk-deliverables">
+        <span class="desk-deliverables-label">What you receive</span>
+        <div class="desk-deliverables-list">
+          <div class="desk-deliverable-item">› Advance Sheet</div>
+          <div class="desk-deliverable-item">› Itinerary & Call Sheet</div>
+          <div class="desk-deliverable-item">› Settlement Pack</div>
+          <div class="desk-deliverable-item">› Deposit Tracker</div>
+          <div class="desk-deliverable-item">› Post-Show Archive</div>
+        </div>
       </div>
     </div>
 
@@ -1351,9 +1420,19 @@ footer {
       <div class="desk-scope">
         <div class="desk-scope-item">Flight, Hotel & Transport</div>
         <div class="desk-scope-item">Itinerary Management</div>
-        <div class="desk-scope-item">Promoter Coordination</div>
+        <div class="desk-scope-item">Advancing & Promoter Coordination</div>
         <div class="desk-scope-item">Visa Coordination</div>
         <div class="desk-scope-item">Travel Documentation</div>
+      </div>
+      <div class="desk-deliverables">
+        <span class="desk-deliverables-label">What you receive</span>
+        <div class="desk-deliverables-list">
+          <div class="desk-deliverable-item">› Advance Sheet</div>
+          <div class="desk-deliverable-item">› Itinerary & Call Sheet</div>
+          <div class="desk-deliverable-item">› Travel & Transfer Plan</div>
+          <div class="desk-deliverable-item">› Visa & Document Tracker</div>
+          <div class="desk-deliverable-item">› Day-Of-Show Contact List</div>
+        </div>
       </div>
     </div>
 
@@ -1375,6 +1454,16 @@ footer {
         <div class="desk-scope-item">Settlement Control</div>
         <div class="desk-scope-item">Post-Show Archiving</div>
       </div>
+      <div class="desk-deliverables">
+        <span class="desk-deliverables-label">What you receive</span>
+        <div class="desk-deliverables-list">
+          <div class="desk-deliverable-item">› Contract Review & Tracker</div>
+          <div class="desk-deliverable-item">› Deposit & Payment Status</div>
+          <div class="desk-deliverable-item">› Settlement Pack</div>
+          <div class="desk-deliverable-item">› Expense & Withholding Log</div>
+          <div class="desk-deliverable-item">› Post-Show Archive</div>
+        </div>
+      </div>
     </div>
 
     <div class="desk reveal reveal-delay-3">
@@ -1390,9 +1479,23 @@ footer {
       <div class="desk-d">Built for festivals, sports organisations and private events managing 50 to 150+ principals simultaneously. We handle the full operational layer, from arrival to the main moment, so your team can focus on the event.</div>
       <div class="desk-scope">
         <div class="desk-scope-item">Travel Matrix (50–150+ Artists)</div>
-        <div class="desk-scope-item">Rooming Lists</div>
-        <div class="desk-scope-item">Pickup Schedules</div>
-        <div class="desk-scope-item">Comms Hub</div>
+        <div class="desk-scope-item">Rooming Lists & Transfers</div>
+        <div class="desk-scope-item">Pickup & Runner Schedules</div>
+        <div class="desk-scope-item">Artist Liaison & Comms Hub</div>
+      </div>
+      <div class="desk-deliverables">
+        <span class="desk-deliverables-label">What you receive</span>
+        <div class="desk-deliverables-list">
+          <div class="desk-deliverable-item">› Master Travel Matrix</div>
+          <div class="desk-deliverable-item">› Rooming List & Hotel Block</div>
+          <div class="desk-deliverable-item">› Pickup & Transfer Schedule</div>
+          <div class="desk-deliverable-item">› Artist Advance Packs</div>
+          <div class="desk-deliverable-item">› Live Comms Hub (24/7)</div>
+        </div>
+      </div>
+      <div class="desk-anchor">
+        <strong>From €6.500 per event</strong><br>
+        Scoped per headcount · Quote within 24h
       </div>
     </div>
 
@@ -1463,7 +1566,8 @@ footer {
     <div class="pricing-footer">
       <div class="pf-bar"></div>
       <p class="pf-text">
-        All fees are <strong>per confirmed show</strong>. Desks can be combined. <strong>No retainers. No exclusivity. No commission on bookings.</strong>
+        All fees are <strong>per confirmed show</strong>. Desks can be combined. <strong>No retainers. No exclusivity. No commission on bookings.</strong><br>
+        <span style="opacity:0.7; font-size:11px;">Multi-leg tours, visa-heavy routings and sub-14-day confirmations are quoted separately.</span>
       </p>
       <a href="#contact" class="btn-primary" style="flex-shrink:0; white-space:nowrap;">Get a Quote</a>
     </div>
@@ -1565,7 +1669,7 @@ footer {
       <div class="contact-details reveal reveal-delay-1">
         <div class="cd-row">
           <span class="cd-label">Email</span>
-          <span class="cd-value"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="84edeae2ebc4f4ede8e8e5f6ebf4f7aae7ebe9">[email&#160;protected]</a></span>
+          <span class="cd-value"><a href="#" id="pillarEmail" data-u="hello" data-d="pillardesk.com">[click to reveal]</a></span>
         </div>
         <div class="cd-row">
           <span class="cd-label">Location</span>
@@ -1591,33 +1695,58 @@ footer {
     </div>
 
     <div class="contact-right reveal reveal-delay-2">
-      <div class="contact-form">
+      <form class="contact-form" id="pillarForm" action="https://formspree.io/f/YOUR_FORM_ID" method="POST">
         <div class="cf-row">
           <div class="cf-field">
             <label class="cf-label">Name</label>
-            <input class="cf-input" type="text" placeholder="Your name">
+            <input class="cf-input" type="text" name="name" placeholder="Your name" required>
           </div>
           <div class="cf-field">
             <label class="cf-label">Email</label>
-            <input class="cf-input" type="email" placeholder="your@email.com">
+            <input class="cf-input" type="email" name="email" placeholder="your@email.com" required>
           </div>
         </div>
         <div class="cf-row">
           <div class="cf-field">
             <label class="cf-label">Artist / Project</label>
-            <input class="cf-input" type="text" placeholder="Artist or project name">
+            <input class="cf-input" type="text" name="artist" placeholder="Artist or project name" required>
           </div>
           <div class="cf-field">
             <label class="cf-label">Desk</label>
-            <input class="cf-input" type="text" placeholder="Full Ops / Logistics / Finance">
+            <select class="cf-select" name="desk" required>
+              <option value="">Select a desk</option>
+              <option value="Desk 01 — Full Ops">Desk 01 — Full Ops</option>
+              <option value="Desk 02 — Tour Logistics">Desk 02 — Tour Logistics</option>
+              <option value="Desk 03 — Finance & Contracting">Desk 03 — Finance & Contracting</option>
+              <option value="Desk 04 — Festival Logistics">Desk 04 — Festival Logistics</option>
+              <option value="Not sure yet">Not sure yet</option>
+            </select>
+          </div>
+        </div>
+        <div class="cf-row">
+          <div class="cf-field">
+            <label class="cf-label">Next confirmed date & city</label>
+            <input class="cf-input" type="text" name="next_date_city" placeholder="e.g. 14 June — Berlin">
+          </div>
+          <div class="cf-field">
+            <label class="cf-label">Show fee range</label>
+            <select class="cf-select" name="fee_range">
+              <option value="">Select a range</option>
+              <option value="€2k – €5k">€2k – €5k</option>
+              <option value="€5k – €15k">€5k – €15k</option>
+              <option value="€15k – €40k">€15k – €40k</option>
+              <option value="€40k+">€40k+</option>
+              <option value="Festival / Multi-artist">Festival / Multi-artist</option>
+            </select>
           </div>
         </div>
         <div class="cf-field">
           <label class="cf-label">Message</label>
-          <textarea class="cf-textarea" placeholder="Tell us about your upcoming tour or shows..."></textarea>
+          <textarea class="cf-textarea" name="message" placeholder="Tell us about your upcoming tour or shows..."></textarea>
         </div>
-        <button class="cf-submit">Send Message</button>
-      </div>
+        <button type="submit" class="cf-submit">Send Message</button>
+        <p id="pillarFormStatus" style="font-size:10px; letter-spacing:0.05em; color:var(--mid-grey); margin-top:12px; min-height:14px;"></p>
+      </form>
     </div>
   </div>
 </section>
@@ -1646,7 +1775,7 @@ footer {
 <!-- ═══════════════════════════════════════
      JS
 ═══════════════════════════════════════ -->
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+<script data-cfasync="false">
 //, Custom Cursor ,
 const dot  = document.getElementById('cursorDot');
 const ring = document.getElementById('cursorRing');
@@ -1710,16 +1839,59 @@ document.querySelectorAll('a[href^="#"]').forEach(a => {
   });
 });
 
-//, Form submit ,
-document.querySelector('.cf-submit').addEventListener('click', () => {
-  const name  = document.querySelector('.cf-input[type="text"]').value.trim();
-  const email = document.querySelector('.cf-input[type="email"]').value.trim();
-  if (!name || !email) {
-    alert('Please fill in at least your name and email.');
-    return;
-  }
-  alert('Message sent! We\'ll get back to you within 24 hours.');
-});
+//, Email obfuscation (JS-based, safe for Cloudflare) ,
+(function() {
+  const el = document.getElementById('pillarEmail');
+  if (!el) return;
+  const addr = el.dataset.u + '@' + el.dataset.d;
+  let revealed = false;
+  el.addEventListener('click', (e) => {
+    e.preventDefault();
+    if (!revealed) {
+      el.textContent = addr;
+      el.setAttribute('href', 'mailto:' + addr);
+      revealed = true;
+    } else {
+      window.location.href = 'mailto:' + addr;
+    }
+  });
+})();
+
+//, Form submit (Formspree) ,
+(function() {
+  const form = document.getElementById('pillarForm');
+  if (!form) return;
+  const status = document.getElementById('pillarFormStatus');
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const data = new FormData(form);
+    if (!data.get('name') || !data.get('email') || !data.get('artist') || !data.get('desk')) {
+      status.textContent = 'Please fill in name, email, project and desk.';
+      status.style.color = '#B8A880';
+      return;
+    }
+    status.textContent = 'Sending...';
+    status.style.color = '#A8A49C';
+    try {
+      const res = await fetch(form.action, {
+        method: 'POST',
+        body: data,
+        headers: { 'Accept': 'application/json' }
+      });
+      if (res.ok) {
+        form.reset();
+        status.textContent = 'Thanks. We will respond within 24 hours.';
+        status.style.color = '#B8A880';
+      } else {
+        status.textContent = 'Something went wrong. Please email us directly.';
+        status.style.color = '#B8A880';
+      }
+    } catch (err) {
+      status.textContent = 'Network error. Please email us directly.';
+      status.style.color = '#B8A880';
+    }
+  });
+})();
 
 //, Falling Pattern ,
 (function() {
