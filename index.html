@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>PILLAR OPS — Touring Infrastructure</title>
+<title>PillarDesk, The operations team behind artists, athletes and VVIPs</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
 <style>
@@ -67,48 +67,42 @@ a { text-decoration: none; color: inherit; }
 ═══════════════════════════════════════ */
 .logo {
   display: inline-flex;
-  flex-direction: column;
   line-height: 1;
-  font-family: var(--mono);
-  font-weight: 700;
-  text-transform: uppercase;
+  font-family: var(--serif);
+  font-weight: 400;
+  color: var(--black);
 }
-.logo .lw { display: flex; align-items: center; }
-.logo .lp { color: var(--black); letter-spacing: 0.12em; }
-.logo .lb { display: inline-block; background: var(--gold); flex-shrink: 0; }
-.logo .ll { color: var(--black); letter-spacing: 0.12em; }
-.logo .lr { width: 100%; height: 1px; background: var(--warm-grey); }
-.logo .lo { font-weight: 400; color: var(--mid-grey); letter-spacing: 0.38em; }
+.logo .lw {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55em;
+}
+.logo .li {
+  color: var(--gold);
+  flex-shrink: 0;
+  width: 1.8em;
+  height: 1.8em;
+}
+.logo .lt {
+  display: inline-flex;
+  flex-direction: column;
+  letter-spacing: 0.08em;
+}
+.logo .lt1, .logo .lt2 {
+  display: block;
+  line-height: 0.95;
+}
 
-.logo.xs { font-size: 11px; }
-.logo.xs .lb { width:2px; height:10px; margin:0 2px; }
-.logo.xs .lr { margin:2px 0; }
-.logo.xs .lo { font-size:6px; margin-top:1px; }
+.logo.xs { font-size: 14px; }
+.logo.sm { font-size: 18px; }
+.logo.md { font-size: 28px; }
+.logo.lg { font-size: 44px; }
 
-.logo.sm { font-size: 15px; }
-.logo.sm .lb { width:2px; height:14px; margin:0 3px; }
-.logo.sm .lr { margin:3px 0; }
-.logo.sm .lo { font-size:7px; margin-top:1px; }
+.logo.dark { color: var(--off-white); }
+.logo.dark .li { color: var(--gold); }
 
-.logo.md { font-size: 24px; }
-.logo.md .lb { width:3px; height:22px; margin:0 4px; }
-.logo.md .lr { margin:4px 0; }
-.logo.md .lo { font-size:9px; margin-top:2px; }
-
-.logo.lg { font-size: 38px; }
-.logo.lg .lb { width:4px; height:36px; margin:0 5px; }
-.logo.lg .lr { margin:5px 0; }
-.logo.lg .lo { font-size:13px; margin-top:2px; }
-
-.logo.dark .lp, .logo.dark .ll { color: var(--off-white); }
-.logo.dark .lb { background: var(--gold); }
-.logo.dark .lr { background: var(--deep-grey); }
-.logo.dark .lo { color: var(--gold-light); }
-
-.logo.gold .lp, .logo.gold .ll { color: var(--black); }
-.logo.gold .lb { background: var(--black); }
-.logo.gold .lr { background: var(--deep-grey); opacity:.25; }
-.logo.gold .lo { color: var(--deep-grey); }
+.logo.gold { color: var(--black); }
+.logo.gold .li { color: var(--black); }
 
 /* ═══════════════════════════════════════
    NAVIGATION
@@ -238,7 +232,13 @@ section {
 ═══════════════════════════════════════ */
 #hero {
   min-height: 100vh;
-  background: var(--black);
+  background-color: var(--black);
+  background-image:
+    linear-gradient(180deg, rgba(10,10,8,0.82) 0%, rgba(10,10,8,0.68) 50%, rgba(10,10,8,0.92) 100%),
+    url('hero-bg.jpg');
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
   padding: 0;
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -247,18 +247,10 @@ section {
   position: relative;
 }
 
-/* Falling pattern canvas */
+/* Falling pattern canvas - disabled when photo hero is used */
 #falling-pattern {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-  z-index: 0;
-  opacity: 0;
-  transition: opacity 1.2s ease;
+  display: none;
 }
-#falling-pattern.ready { opacity: 1; }
 
 .hero-left,
 .hero-right {
@@ -271,7 +263,7 @@ section {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  border-right: 1px solid var(--deep-grey);
+  border-right: 1px solid rgba(255,255,255,0.06);
   position: relative;
 }
 .hero-left::before {
@@ -382,13 +374,15 @@ section {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 1px;
-  background: var(--deep-grey);
+  background: rgba(255,255,255,0.08);
   margin-top: auto;
   position: relative;
   z-index: 1;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
 }
 .hero-stat {
-  background: var(--black);
+  background: rgba(10,10,8,0.72);
   padding: 28px 24px;
 }
 .hero-stat-num {
@@ -1106,9 +1100,9 @@ footer {
 <nav id="mainNav">
   <a href="#hero">
     <div class="logo sm dark">
-      <div class="lw"><span class="lp">PIL</span><span class="lb"></span><span class="ll">LAR</span></div>
+      <div class="lw"><svg class="li" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><rect x="4" y="4" width="92" height="92" fill="none" stroke="currentColor" stroke-width="3"/><rect x="46" y="18" width="8" height="52" fill="currentColor"/><rect x="20" y="70" width="60" height="5" fill="currentColor"/></svg><span class="lt"><span class="lt1">PILLAR</span><span class="lt2">DESK</span></span></div>
       <div class="lr"></div>
-      <span class="lo">OPS</span>
+      
     </div>
   </a>
   <ul class="nav-links">
@@ -1134,12 +1128,12 @@ footer {
     <div>
       <p class="hero-tagline reveal">Touring Infrastructure · Est. 2026</p>
       <h1 class="hero-headline reveal reveal-delay-1">
-        BEYOND<br>THE<br><span class="gold">BOOKING</span>
+        THE OPS<br><span class="gold">BEHIND YOU</span>
       </h1>
     </div>
     <div class="hero-sub">
       <p class="hero-desc reveal reveal-delay-2">
-        Operational infrastructure for artists, managers and teams touring internationally. We run the show — from confirmed booking to showtime. Financial and Legal Backup? We make sure you get paid. From contract to payment — fully managed.
+        The operations team behind artists, athletes and VVIPs. Travel, contracts, payments and logistics, all handled from the moment the booking is confirmed, until the moment of arrival. One desk. Every engagement.
       </p>
       <div class="hero-ctas reveal reveal-delay-3">
         <a href="#services" class="btn-primary">Our Services</a>
@@ -1151,13 +1145,13 @@ footer {
   <div class="hero-right">
     <div class="hero-logo-wrap reveal reveal-delay-2">
       <div class="logo lg dark">
-        <div class="lw"><span class="lp">PIL</span><span class="lb"></span><span class="ll">LAR</span></div>
+        <div class="lw"><svg class="li" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><rect x="4" y="4" width="92" height="92" fill="none" stroke="currentColor" stroke-width="3"/><rect x="46" y="18" width="8" height="52" fill="currentColor"/><rect x="20" y="70" width="60" height="5" fill="currentColor"/></svg><span class="lt"><span class="lt1">PILLAR</span><span class="lt2">DESK</span></span></div>
         <div class="lr"></div>
-        <span class="lo">OPS</span>
+        
       </div>
     </div>
 
-    <div class="hero-bg-text">OPS</div>
+    <div class="hero-bg-text">DESK</div>
 
     <div class="hero-stats reveal reveal-delay-3">
       <div class="hero-stat">
@@ -1165,7 +1159,7 @@ footer {
         <div class="hero-stat-label">Years Industry Experience</div>
       </div>
       <div class="hero-stat">
-        <div class="hero-stat-num">3</div>
+        <div class="hero-stat-num">4</div>
         <div class="hero-stat-label">Operational Desks</div>
       </div>
       <div class="hero-stat">
@@ -1190,19 +1184,19 @@ footer {
 <div class="ticker">
   <div class="ticker-track">
     <span>Touring Infrastructure</span><span class="sep">|</span>
-    <span>Beyond the Booking</span><span class="sep">|</span>
+    <span>One Desk. Every Engagement.</span><span class="sep">|</span>
     <span>Contract to Showtime</span><span class="sep">|</span>
     <span>Independent Artists</span><span class="sep">|</span>
     <span>Global Operations</span><span class="sep">|</span>
     <span>No Commission</span><span class="sep">|</span>
-    <span>PIL|LAR OPS</span><span class="sep">|</span>
+    <span>PILLARDESK</span><span class="sep">|</span>
     <span>Touring Infrastructure</span><span class="sep">|</span>
-    <span>Beyond the Booking</span><span class="sep">|</span>
+    <span>One Desk. Every Engagement.</span><span class="sep">|</span>
     <span>Contract to Showtime</span><span class="sep">|</span>
     <span>Independent Artists</span><span class="sep">|</span>
     <span>Global Operations</span><span class="sep">|</span>
     <span>No Commission</span><span class="sep">|</span>
-    <span>PIL|LAR OPS</span><span class="sep">|</span>
+    <span>PILLARDESK</span><span class="sep">|</span>
   </div>
 </div>
 
@@ -1213,14 +1207,14 @@ footer {
 <section id="about">
   <div class="about-grid">
     <div>
-      <p class="section-eyebrow reveal">About Pillar Ops</p>
+      <p class="section-eyebrow reveal">About PillarDesk</p>
       <h2 class="section-title reveal reveal-delay-1">THE OPERATIONAL<br>BACKBONE.</h2>
       <p class="about-body reveal reveal-delay-2">
-        Pillar Ops is operational infrastructure for artists, managers and teams who organise shows worldwide. We handle the professional execution of confirmed shows — without acting as a booking agency or taking commission on bookings.
+        PillarDesk is the operations team behind artists, athletes and VVIPs. We handle the professional execution of confirmed engagements worldwide, tours, fixtures, private trips, speaking gigs, without acting as a booking agency or taking commission on bookings.
       </p>
       <p class="about-detail reveal reveal-delay-3">
-        Our role begins the moment a show is confirmed. From that point, we support artists and their teams with the full operational execution of tours and performances. The live industry is growing globally. Artists operate increasingly internationally and take more control of their own careers — creating a new category: the independent international artist with direct relationships with promoters, but no dedicated operations layer.<br><br>
-        Pillar Ops was built to fill exactly that gap.
+        Our role begins the moment the booking is confirmed. From that point, we support artists, athletes, principals and their teams with the full operational execution of every engagement. More performers work internationally, more independently, with direct relationships with promoters, agents and clients, but no dedicated operations layer.<br><br>
+        PillarDesk was built to fill exactly that gap.
       </p>
       <a href="#services" class="btn-primary reveal reveal-delay-4" style="display:inline-block;">View Our Services →</a>
     </div>
@@ -1255,8 +1249,8 @@ footer {
       </div>
 
       <div class="manifesto-block reveal reveal-delay-2">
-        <p>"The role of Pillar begins where the booking ends. We run the show."</p>
-        <cite>— Pillar Ops · Brand Manifesto</cite>
+        <p>"The role of PillarDesk begins where the booking ends. We run the show, for every engagement."</p>
+        <cite>, PillarDesk · Brand Manifesto</cite>
       </div>
     </div>
   </div>
@@ -1274,11 +1268,11 @@ footer {
     </div>
     <div class="reveal reveal-delay-2">
       <p class="services-intro-text">
-        Pillar Ops works with four modular operational desks. Each desk solves a specific problem within the workflow of international shows.
+        PillarDesk works with four modular operational desks. Each desk solves a specific problem within the workflow of international engagements, whether it is a tour, a fixture, a trip or a performance.
       </p>
       <p class="services-intro-note" style="margin-top:24px;">
         The desks can be used separately or combined.<br>
-        From contract to showtime — we own the execution.
+        From contract to showtime, we own the execution.
       </p>
     </div>
   </div>
@@ -1288,14 +1282,14 @@ footer {
     <div class="desk reveal">
       <div class="desk-logo">
         <div class="logo xs dark">
-          <div class="lw"><span class="lp">PIL</span><span class="lb"></span><span class="ll">LAR</span></div>
+          <div class="lw"><svg class="li" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><rect x="4" y="4" width="92" height="92" fill="none" stroke="currentColor" stroke-width="3"/><rect x="46" y="18" width="8" height="52" fill="currentColor"/><rect x="20" y="70" width="60" height="5" fill="currentColor"/></svg><span class="lt"><span class="lt1">PILLAR</span><span class="lt2">DESK</span></span></div>
           <div class="lr"></div>
-          <span class="lo">OPS</span>
+          
         </div>
       </div>
       <div class="desk-n">DESK 01</div>
       <div class="desk-t">Full Ops<br>Desk</div>
-      <div class="desk-d">Complete operational support from a confirmed show. Designed for artists who receive bookings but have no in-house operations team. Pillar acts as the artist's external operations department.</div>
+      <div class="desk-d">Complete operational support from a confirmed engagement. Designed for artists, athletes and principals who receive bookings but have no in-house operations team. PillarDesk acts as your external operations department.</div>
       <div class="desk-scope">
         <div class="desk-scope-item">Contract & Administration</div>
         <div class="desk-scope-item">Travel & Planning</div>
@@ -1308,14 +1302,14 @@ footer {
     <div class="desk reveal reveal-delay-1">
       <div class="desk-logo">
         <div class="logo xs dark">
-          <div class="lw"><span class="lp">PIL</span><span class="lb"></span><span class="ll">LAR</span></div>
+          <div class="lw"><svg class="li" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><rect x="4" y="4" width="92" height="92" fill="none" stroke="currentColor" stroke-width="3"/><rect x="46" y="18" width="8" height="52" fill="currentColor"/><rect x="20" y="70" width="60" height="5" fill="currentColor"/></svg><span class="lt"><span class="lt1">PILLAR</span><span class="lt2">DESK</span></span></div>
           <div class="lr"></div>
-          <span class="lo">OPS</span>
+          
         </div>
       </div>
       <div class="desk-n">DESK 02</div>
       <div class="desk-t">Tour Logistics<br>Desk</div>
-      <div class="desk-d">Fully focused on travel planning and show scheduling. For artists who manage contracts through a manager or agent, but need support organising travel and planning.</div>
+      <div class="desk-d">Fully focused on travel planning and engagement scheduling. For clients who manage contracts through a manager or agent, but need support organising travel and logistics.</div>
       <div class="desk-scope">
         <div class="desk-scope-item">Flight, Hotel & Transport</div>
         <div class="desk-scope-item">Itinerary Management</div>
@@ -1328,14 +1322,14 @@ footer {
     <div class="desk reveal reveal-delay-2">
       <div class="desk-logo">
         <div class="logo xs dark">
-          <div class="lw"><span class="lp">PIL</span><span class="lb"></span><span class="ll">LAR</span></div>
+          <div class="lw"><svg class="li" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><rect x="4" y="4" width="92" height="92" fill="none" stroke="currentColor" stroke-width="3"/><rect x="46" y="18" width="8" height="52" fill="currentColor"/><rect x="20" y="70" width="60" height="5" fill="currentColor"/></svg><span class="lt"><span class="lt1">PILLAR</span><span class="lt2">DESK</span></span></div>
           <div class="lr"></div>
-          <span class="lo">OPS</span>
+          
         </div>
       </div>
       <div class="desk-n">DESK 03</div>
       <div class="desk-t">Finance &<br>Contracting Desk</div>
-      <div class="desk-d">The administrative backbone of tours. Many artists manage their own travel but lack a structured way to handle contracts and payments. We solve that.</div>
+      <div class="desk-d">The administrative backbone of tours and engagements. Many clients manage their own travel but lack a structured way to handle contracts and payments. We solve that.</div>
       <div class="desk-scope">
         <div class="desk-scope-item">Contract Management</div>
         <div class="desk-scope-item">Financial Administration</div>
@@ -1348,14 +1342,14 @@ footer {
     <div class="desk reveal reveal-delay-3">
       <div class="desk-logo">
         <div class="logo xs dark">
-          <div class="lw"><span class="lp">PIL</span><span class="lb"></span><span class="ll">LAR</span></div>
+          <div class="lw"><svg class="li" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><rect x="4" y="4" width="92" height="92" fill="none" stroke="currentColor" stroke-width="3"/><rect x="46" y="18" width="8" height="52" fill="currentColor"/><rect x="20" y="70" width="60" height="5" fill="currentColor"/></svg><span class="lt"><span class="lt1">PILLAR</span><span class="lt2">DESK</span></span></div>
           <div class="lr"></div>
-          <span class="lo">OPS</span>
+          
         </div>
       </div>
       <div class="desk-n">DESK 04</div>
       <div class="desk-t">Festival Artist<br>Logistics Desk</div>
-      <div class="desk-d">Built for festivals managing 50 to 150+ artists simultaneously. We handle the full operational layer — from artist arrival to stage — so your team can focus on the event.</div>
+      <div class="desk-d">Built for festivals, sports organisations and private events managing 50 to 150+ principals simultaneously. We handle the full operational layer, from arrival to the main moment, so your team can focus on the event.</div>
       <div class="desk-scope">
         <div class="desk-scope-item">Travel Matrix (50–150+ Artists)</div>
         <div class="desk-scope-item">Rooming Lists</div>
@@ -1379,7 +1373,7 @@ footer {
     </div>
     <div class="reveal reveal-delay-2">
       <p class="pricing-note">
-        Pillar charges a fixed operational fee per confirmed show. No retainers, no exclusivity, no commission on bookings.
+        PillarDesk charges a fixed operational fee per confirmed engagement. No retainers, no exclusivity, no commission on bookings.
       </p>
       <p class="pricing-rule" style="margin-top:20px;">
         Minimum show fee: €2.000<br>
@@ -1446,16 +1440,16 @@ footer {
   <p class="section-eyebrow reveal">Team & Advisory</p>
   <h2 class="section-title reveal reveal-delay-1">26 YEARS OF<br>INDUSTRY<br>EXPERIENCE.</h2>
   <p style="font-family:var(--mono); font-size:12px; letter-spacing:0.02em; color:var(--warm-grey); line-height:1.8; max-width:620px; margin-top:16px;" class="reveal reveal-delay-2">
-    Pillar Ops was built from over 26 years of experience in the international music industry — from artist booking and management to festival programming and international touring.
+    PillarDesk was built from over 26 years of experience in the international live industry, from artist booking and management to festival programming, international touring, and operational support for high-profile clients.
   </p>
 
   <div class="team-grid">
     <div class="team-card reveal">
       <div class="tc-logo">
         <div class="logo xs dark">
-          <div class="lw"><span class="lp">PIL</span><span class="lb"></span><span class="ll">LAR</span></div>
+          <div class="lw"><svg class="li" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><rect x="4" y="4" width="92" height="92" fill="none" stroke="currentColor" stroke-width="3"/><rect x="46" y="18" width="8" height="52" fill="currentColor"/><rect x="20" y="70" width="60" height="5" fill="currentColor"/></svg><span class="lt"><span class="lt1">PILLAR</span><span class="lt2">DESK</span></span></div>
           <div class="lr"></div>
-          <span class="lo">OPS</span>
+          
         </div>
       </div>
       <div class="tc-name">Founder</div>
@@ -1465,9 +1459,9 @@ footer {
     <div class="team-card reveal reveal-delay-1">
       <div class="tc-logo">
         <div class="logo xs dark">
-          <div class="lw"><span class="lp">PIL</span><span class="lb"></span><span class="ll">LAR</span></div>
+          <div class="lw"><svg class="li" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><rect x="4" y="4" width="92" height="92" fill="none" stroke="currentColor" stroke-width="3"/><rect x="46" y="18" width="8" height="52" fill="currentColor"/><rect x="20" y="70" width="60" height="5" fill="currentColor"/></svg><span class="lt"><span class="lt1">PILLAR</span><span class="lt2">DESK</span></span></div>
           <div class="lr"></div>
-          <span class="lo">OPS</span>
+          
         </div>
       </div>
       <div class="tc-name">Operations Team</div>
@@ -1527,7 +1521,7 @@ footer {
   <div class="contact-grid">
     <div class="contact-left">
       <p class="contact-intro reveal">
-        The role of Pillar begins when a show is confirmed. Get in touch to discuss how we can support your next tour or series of shows.
+        The role of PillarDesk begins when a booking is confirmed. Get in touch to discuss how we can support your next tour, season or engagement.
       </p>
 
       <div class="contact-details reveal reveal-delay-1">
@@ -1545,15 +1539,15 @@ footer {
         </div>
         <div class="cd-row">
           <span class="cd-label">Website</span>
-          <span class="cd-value">pillarops.com</span>
+          <span class="cd-value">pillardesk.com</span>
         </div>
       </div>
 
       <div style="margin-top:8px;" class="reveal reveal-delay-2">
         <div class="logo md dark">
-          <div class="lw"><span class="lp">PIL</span><span class="lb"></span><span class="ll">LAR</span></div>
+          <div class="lw"><svg class="li" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><rect x="4" y="4" width="92" height="92" fill="none" stroke="currentColor" stroke-width="3"/><rect x="46" y="18" width="8" height="52" fill="currentColor"/><rect x="20" y="70" width="60" height="5" fill="currentColor"/></svg><span class="lt"><span class="lt1">PILLAR</span><span class="lt2">DESK</span></span></div>
           <div class="lr"></div>
-          <span class="lo">OPS</span>
+          
         </div>
       </div>
     </div>
@@ -1596,9 +1590,9 @@ footer {
 ═══════════════════════════════════════ -->
 <footer>
   <div class="logo sm dark">
-    <div class="lw"><span class="lp">PIL</span><span class="lb"></span><span class="ll">LAR</span></div>
+    <div class="lw"><svg class="li" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><rect x="4" y="4" width="92" height="92" fill="none" stroke="currentColor" stroke-width="3"/><rect x="46" y="18" width="8" height="52" fill="currentColor"/><rect x="20" y="70" width="60" height="5" fill="currentColor"/></svg><span class="lt"><span class="lt1">PILLAR</span><span class="lt2">DESK</span></span></div>
     <div class="lr"></div>
-    <span class="lo">OPS</span>
+    
   </div>
   <ul class="footer-links">
     <li><a href="#about">About</a></li>
@@ -1607,7 +1601,7 @@ footer {
     <li><a href="#team">Team</a></li>
     <li><a href="#contact">Contact</a></li>
   </ul>
-  <p class="footer-copy">© 2026 Pillar Ops<br>Touring Infrastructure</p>
+  <p class="footer-copy">© 2026 PillarDesk<br>The Operations Team Behind Artists, Athletes &amp; VVIPs</p>
 </footer>
 
 
@@ -1615,7 +1609,7 @@ footer {
      JS
 ═══════════════════════════════════════ -->
 <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
-// — Custom Cursor —
+//, Custom Cursor ,
 const dot  = document.getElementById('cursorDot');
 const ring = document.getElementById('cursorRing');
 const ringEl = document.getElementById('ringEl');
@@ -1641,7 +1635,7 @@ document.querySelectorAll('a, button, .desk-card, .pillar-item, .team-card').for
   el.addEventListener('mouseleave', () => ringEl.classList.remove('hovered'));
 });
 
-// — Scroll: nav active + scrolled state —
+//, Scroll: nav active + scrolled state ,
 const nav = document.getElementById('mainNav');
 const sections = document.querySelectorAll('section[id]');
 const navLinks = document.querySelectorAll('.nav-links a');
@@ -1660,7 +1654,7 @@ window.addEventListener('scroll', () => {
   });
 });
 
-// — Reveal on scroll —
+//, Reveal on scroll ,
 const reveals = document.querySelectorAll('.reveal');
 const io = new IntersectionObserver((entries) => {
   entries.forEach(e => {
@@ -1669,7 +1663,7 @@ const io = new IntersectionObserver((entries) => {
 }, { threshold: 0.12 });
 reveals.forEach(r => io.observe(r));
 
-// — Smooth scroll for all anchors —
+//, Smooth scroll for all anchors ,
 document.querySelectorAll('a[href^="#"]').forEach(a => {
   a.addEventListener('click', e => {
     e.preventDefault();
@@ -1678,7 +1672,7 @@ document.querySelectorAll('a[href^="#"]').forEach(a => {
   });
 });
 
-// — Form submit —
+//, Form submit ,
 document.querySelector('.cf-submit').addEventListener('click', () => {
   const name  = document.querySelector('.cf-input[type="text"]').value.trim();
   const email = document.querySelector('.cf-input[type="email"]').value.trim();
@@ -1689,7 +1683,7 @@ document.querySelector('.cf-submit').addEventListener('click', () => {
   alert('Message sent! We\'ll get back to you within 24 hours.');
 });
 
-// — Falling Pattern —
+//, Falling Pattern ,
 (function() {
   const canvas = document.getElementById('falling-pattern');
   if (!canvas) return;
@@ -1729,7 +1723,7 @@ document.querySelector('.cf-submit').addEventListener('click', () => {
     const dt = Math.min((ts - last) / 1000, 0.05);
     last = ts;
 
-    // Fade trail — very dark overlay instead of clearRect to keep tails
+    // Fade trail, very dark overlay instead of clearRect to keep tails
     ctx.fillStyle = 'rgba(10,10,8,0.18)';
     ctx.fillRect(0, 0, W, H);
 
@@ -1768,7 +1762,7 @@ document.querySelector('.cf-submit').addEventListener('click', () => {
       }
     });
 
-    // Scattered static dots — faint grid feel
+    // Scattered static dots, faint grid feel
     if (Math.random() < 0.3) {
       const sx = Math.random() * W;
       const sy = Math.random() * H;
