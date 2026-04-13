@@ -404,23 +404,25 @@ section {
 /* Scroll indicator */
 .scroll-hint {
   position: absolute;
-  bottom: 32px;
-  left: 50%;
-  transform: translateX(-50%);
+  bottom: 40px;
+  left: 24px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
   z-index: 10;
+  opacity: 0.7;
 }
 .scroll-hint span {
   font-size: 8px;
   letter-spacing: 0.3em;
   text-transform: uppercase;
   color: var(--mid-grey);
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
 }
 .scroll-hint .arrow {
-  width: 1px; height: 40px;
+  width: 1px; height: 36px;
   background: linear-gradient(to bottom, var(--gold), transparent);
   animation: scrollArrow 1.6s ease-in-out infinite;
 }
@@ -1151,7 +1153,7 @@ footer {
       </div>
     </div>
 
-    <div class="hero-bg-text">DESK</div>
+    <div class="hero-bg-text" style="display:none;">DESK</div>
 
     <div class="hero-stats reveal reveal-delay-3">
       <div class="hero-stat">
