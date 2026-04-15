@@ -346,15 +346,61 @@ nav.scrolled { border-bottom-color: var(--gold); }
   display: none;
   flex-direction: column;
   gap: 5px;
-  cursor: none;
+  cursor: pointer;
   background: none;
   border: none;
-  padding: 4px;
+  padding: 10px;
+  z-index: 110;
 }
 .nav-mobile-btn span {
-  width: 24px; height: 1px;
+  width: 26px;
+  height: 1.5px;
   background: var(--off-white);
-  transition: transform 0.3s, opacity 0.3s;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+  display: block;
+}
+.nav-mobile-btn.open span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
+.nav-mobile-btn.open span:nth-child(2) { opacity: 0; }
+.nav-mobile-btn.open span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
+
+/* Mobile menu drawer */
+.mobile-menu {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100vh;
+  background: var(--black);
+  z-index: 99;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 32px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+.mobile-menu.open {
+  opacity: 1;
+  pointer-events: auto;
+}
+.mobile-menu a {
+  font-family: var(--serif);
+  font-size: 32px;
+  color: var(--off-white);
+  letter-spacing: 0.02em;
+  transition: color 0.2s ease;
+}
+.mobile-menu a:hover { color: var(--gold); }
+.mobile-menu .mobile-cta {
+  margin-top: 20px;
+  font-family: var(--mono);
+  font-size: 13px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--gold);
+  border: 1px solid var(--gold);
+  padding: 14px 28px;
+  font-weight: 700;
 }
 
 /* ═══════════════════════════════════════
@@ -663,7 +709,15 @@ section {
    ABOUT
 ═══════════════════════════════════════ */
 #about {
-  background: var(--off-white);
+  background: var(--black);
+  color: var(--off-white);
+}
+#about .section-title { color: var(--off-white); }
+#about .about-body {
+  color: var(--warm-grey);
+}
+#about .about-detail {
+  color: var(--mid-grey);
 }
 .about-grid {
   display: grid;
@@ -696,14 +750,15 @@ section {
   margin-bottom: 40px;
 }
 .pillar-item {
-  background: var(--off-white);
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--deep-grey);
   padding: 20px 24px;
   display: flex;
   align-items: center;
   gap: 20px;
-  transition: background 0.2s;
+  transition: all 0.2s;
 }
-.pillar-item:hover { background: #EDEAE4; }
+.pillar-item:hover { background: rgba(139, 125, 85, 0.1); border-color: var(--gold); }
 .pi-num {
   font-size: 9px;
   letter-spacing: 0.2em;
@@ -715,18 +770,18 @@ section {
   font-size: 11px;
   letter-spacing: 0.15em;
   text-transform: uppercase;
-  color: var(--black);
+  color: var(--off-white);
 }
 .pi-arrow {
   margin-left: auto;
   font-size: 11px;
-  color: var(--warm-grey);
+  color: var(--mid-grey);
   transition: color 0.2s, transform 0.2s;
 }
 .pillar-item:hover .pi-arrow { color: var(--gold); transform: translateX(4px); }
 
 .manifesto-block {
-  background: var(--black);
+  background: var(--deep-grey);
   padding: 36px 32px;
   position: relative;
 }
@@ -1574,10 +1629,22 @@ footer {
     <li><a href="#contact">Contact</a></li>
   </ul>
   <a href="#contact" class="nav-cta">Get in Touch</a>
-  <button class="nav-mobile-btn" aria-label="Menu">
+  <button class="nav-mobile-btn" aria-label="Menu" id="mobileBtn">
     <span></span><span></span><span></span>
   </button>
 </nav>
+
+<!-- MOBILE MENU DRAWER -->
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#audience" class="mobile-link">Who</a>
+  <a href="#about" class="mobile-link">About</a>
+  <a href="#services" class="mobile-link">Services</a>
+  <a href="#pricing" class="mobile-link">Pricing</a>
+  <a href="#proof" class="mobile-link">Proof</a>
+  <a href="#faq" class="mobile-link">FAQ</a>
+  <a href="#contact" class="mobile-link">Contact</a>
+  <a href="#contact" class="mobile-cta mobile-link">Get in Touch</a>
+</div>
 
 
 <!-- ═══════════════════════════════════════
@@ -2399,6 +2466,35 @@ document.querySelector('.cf-submit').addEventListener('click', () => {
     last = ts;
     draw(ts);
     canvas.classList.add('ready');
+  });
+})();
+
+// Mobile menu toggle
+(function(){
+  var btn = document.getElementById('mobileBtn');
+  var menu = document.getElementById('mobileMenu');
+  if (!btn || !menu) return;
+
+  function closeMenu() {
+    btn.classList.remove('open');
+    menu.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  btn.addEventListener('click', function(){
+    var isOpen = btn.classList.toggle('open');
+    menu.classList.toggle('open');
+    document.body.style.overflow = isOpen ? 'hidden' : '';
+  });
+
+  // Close when a link is tapped
+  document.querySelectorAll('.mobile-link').forEach(function(link){
+    link.addEventListener('click', closeMenu);
+  });
+
+  // Close on Escape
+  document.addEventListener('keydown', function(e){
+    if (e.key === 'Escape') closeMenu();
   });
 })();
 
