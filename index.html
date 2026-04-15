@@ -1030,6 +1030,32 @@ section {
 }
 .cf-submit:hover { background: var(--gold-light); }
 .cf-submit::after { content: '→'; font-size: 14px; margin-left: auto; }
+.cf-submit:disabled { opacity: 0.5; cursor: not-allowed; }
+
+/* Select dropdown styling to match inputs */
+select.cf-input {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'><path fill='none' stroke='%238B7D55' stroke-width='1.5' d='M1 1l5 5 5-5'/></svg>");
+  background-repeat: no-repeat;
+  background-position: right 16px center;
+  padding-right: 40px;
+  cursor: pointer;
+}
+select.cf-input option { background: var(--off-white); color: var(--black); }
+
+/* Form status message */
+.cf-status {
+  margin-top: 16px;
+  padding: 14px 18px;
+  font-family: var(--mono);
+  font-size: 12px;
+  letter-spacing: 0.05em;
+  line-height: 1.5;
+}
+.cf-status.success { background: rgba(139, 125, 85, 0.15); color: var(--gold); border-left: 2px solid var(--gold); }
+.cf-status.error { background: rgba(220, 80, 80, 0.12); color: #d56565; border-left: 2px solid #d56565; }
 
 /* ═══════════════════════════════════════
    FOOTER
@@ -1703,33 +1729,43 @@ footer {
     </div>
 
     <div class="contact-right reveal reveal-delay-2">
-      <div class="contact-form">
+      <form class="contact-form" id="contactForm" action="https://formspree.io/f/maqaqdqq" method="POST">
         <div class="cf-row">
           <div class="cf-field">
             <label class="cf-label">Name</label>
-            <input class="cf-input" type="text" placeholder="Your name">
+            <input class="cf-input" type="text" name="name" placeholder="Your name" required>
           </div>
           <div class="cf-field">
             <label class="cf-label">Email</label>
-            <input class="cf-input" type="email" placeholder="your@email.com">
+            <input class="cf-input" type="email" name="email" placeholder="your@email.com" required>
           </div>
         </div>
         <div class="cf-row">
           <div class="cf-field">
             <label class="cf-label">Artist / Project</label>
-            <input class="cf-input" type="text" placeholder="Artist or project name">
+            <input class="cf-input" type="text" name="artist_or_project" placeholder="Artist or project name">
           </div>
           <div class="cf-field">
             <label class="cf-label">Desk</label>
-            <input class="cf-input" type="text" placeholder="Full Ops / Logistics / Finance">
+            <select class="cf-input" name="desk" required>
+              <option value="">Select a desk</option>
+              <option value="Full Ops Desk">Full Ops Desk</option>
+              <option value="Tour Logistics Desk">Tour Logistics Desk</option>
+              <option value="Finance &amp; Contracting">Finance &amp; Contracting</option>
+              <option value="Festival Artist Logistics">Festival Artist Logistics</option>
+              <option value="Not sure yet">Not sure yet</option>
+            </select>
           </div>
         </div>
         <div class="cf-field">
           <label class="cf-label">Message</label>
-          <textarea class="cf-textarea" placeholder="Tell us about your upcoming tour or shows..."></textarea>
+          <textarea class="cf-textarea" name="message" placeholder="Tell us about your upcoming tour or shows..." required></textarea>
         </div>
-        <button class="cf-submit">Send Message</button>
-      </div>
+        <input type="hidden" name="_subject" value="New PillarDesk enquiry">
+        <input type="text" name="_gotcha" style="display:none">
+        <button type="submit" class="cf-submit">Send Message</button>
+        <div id="cfStatus" class="cf-status" style="display:none;"></div>
+      </form>
     </div>
   </div>
 </section>
@@ -1933,6 +1969,53 @@ document.querySelector('.cf-submit').addEventListener('click', () => {
     last = ts;
     draw(ts);
     canvas.classList.add('ready');
+  });
+})();
+
+// Contact form: submit to Formspree via AJAX
+(function(){
+  var form = document.getElementById('contactForm');
+  if (!form) return;
+  var status = document.getElementById('cfStatus');
+  var submit = form.querySelector('.cf-submit');
+
+  form.addEventListener('submit', function(e){
+    e.preventDefault();
+    status.style.display = 'none';
+    status.className = 'cf-status';
+    submit.disabled = true;
+    var originalText = submit.firstChild.nodeValue;
+    submit.firstChild.nodeValue = 'Sending';
+
+    var data = new FormData(form);
+    fetch(form.action, {
+      method: 'POST',
+      body: data,
+      headers: { 'Accept': 'application/json' }
+    })
+    .then(function(response){
+      submit.disabled = false;
+      submit.firstChild.nodeValue = originalText;
+      if (response.ok) {
+        status.className = 'cf-status success';
+        status.textContent = 'Thanks. Your message is on its way. We will respond within 24 hours.';
+        status.style.display = 'block';
+        form.reset();
+      } else {
+        return response.json().then(function(d){
+          status.className = 'cf-status error';
+          status.textContent = (d && d.errors && d.errors.length) ? d.errors.map(function(x){return x.message}).join(', ') : 'Something went wrong. Please try again or email us directly.';
+          status.style.display = 'block';
+        });
+      }
+    })
+    .catch(function(){
+      submit.disabled = false;
+      submit.firstChild.nodeValue = originalText;
+      status.className = 'cf-status error';
+      status.textContent = 'Network error. Please try again or email us directly.';
+      status.style.display = 'block';
+    });
   });
 })();
 </script>
